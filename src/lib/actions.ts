@@ -21,10 +21,10 @@ const queries = {
      WITH filtered_data AS (
                     SELECT *
                     FROM schools
-                    WHERE (LOWER(universityName) LIKE LOWER($1)
-                           OR LOWER(collegeName) LIKE LOWER($1)
-                           OR LOWER(institutionName) LIKE LOWER($1)
-                           OR LOWER(schoolName) LIKE LOWER($1))
+                    WHERE (universityName ILIKE $1
+                           OR collegeName ILIKE $1
+                           OR institutionName ILIKE $1
+                           OR schoolName ILIKE $1)
                 )
                 SELECT
                     (SELECT COUNT(*) FROM filtered_data) AS totalItems,
@@ -56,7 +56,7 @@ export const getSchools = async (search = "", state = "", district = "", page = 
         const { rows } = await client.query(query, values);
 
         return {
-            totalItems: rows[0]?.totalitems || 0,
+            totalItems: parseInt(rows[0]?.totalitems) || 0,
             totalPages: Math.ceil(rows[0]?.totalitems / limit),
             page,
             search,
