@@ -41,7 +41,10 @@ export function SearchSchools({ states, districts }: { states: State[]; district
     try {
       const params = new URLSearchParams()
 
-      if (query) params.append("query", query)
+      if (query) {
+        setCurrentPage(1)
+        params.append("query", query)
+      }
       if (state && state !== "ALL STATES") params.append("state", state)
       if (district) params.append("district", district)
       params.append("page", currentPage.toString())
